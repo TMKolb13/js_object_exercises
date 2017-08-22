@@ -40,7 +40,77 @@
     // Put your code here!
     ///////////////////////////
 
-    
+    //code taken directly from MDN word for word to generate a random number
+    function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+  }
+
+    function LivingThing(monsterName, monsterHealth) {
+      let name = monsterName;
+      let health = monsterHealth;
+
+      this.isAlive = function(){
+        return (health > 0)
+      }
+
+      this.getName = function(){
+        return name;
+      }
+
+      this.getHealth = function(){
+        return health;
+      }
+
+      this.setHealth = function(newHealth){
+        health = newHealth;
+      }
+    }
+
+    function Hero(heroName, heroHealth){
+      //this replaces the extends keyword used in ES6
+      LivingThing.call(this,heroName, heroHealth)
+
+      this.attack = function(monster){
+        //generate random numbers between 0 and 10 fir the damage in the attack
+        let heroDamage = getRandomIntInclusive(0,10);
+        let monsterDamage = getRandomIntInclusive(0,10);
+        //decrease the health of the monster by the random number damage
+        monster.setHealth(monster.getHealth() - monsterDamage);
+        //decrease the health of the hero by the random number damage
+        this.setHealth(this.getHealth() - heroDamage);
+
+        console.log(this.getName() + " took " + heroDamage + " damage. Current health = " + this.getHealth());
+        console.log(monster.getName() + " took " + monsterDamage + " damage. Current health = " + monster.getHealth());
+      }
+
+      //tried this and it looks like it doesn't continue to loop through, it just fights each of them once
+      // this.fight = function(monsters) {
+      //   for(let a=0; a < monsters.length; a++){
+      //     if(monsters[a].isAlive){
+      //       this.attack(monsters[a]);
+      //     }
+      //   }
+
+      this.fight = function(monsters){
+        for(let a=0; a < monsters.length; a++){
+          while (monsters[a].isAlive() && this.isAlive()){
+            this.attack(monsters[a]);
+          }
+        }
+      }
+    }
+
+    let hero = new Hero("superman", 100);
+
+    let Rat = new LivingThing("Rat", 5);
+    let Goblin = new LivingThing("Goblin", 30);
+    let Ogre = new LivingThing("Orge", 80);
+
+    let monsters = [Rat, Goblin, Ogre]
+
+
 
     //The code below should work when you are done
     console.log("A hero emerges!");
